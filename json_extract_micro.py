@@ -20,18 +20,16 @@ def find_in_data(data, key, filter_key=None, filter_value=None):
 
 @app.route('/upload_and_get_data', methods=['POST'])
 def upload_and_get_data():
-    if 'file' not in request.files:
-        return jsonify({"error": "No file part"}), 400
-    
-    file = request.files['file']
+    file_path = request.form.get('file_path')
     output_key = request.form.get('output_key')  # Key to output
     filter_json = request.form.get('filter_json')  # Optional filter in the format "key:value"
 
-    if file.filename == '':
-        return jsonify({"error": "No selected file"}), 400
+    if not file_path:
+        return jsonify({"error": "No file path provided"}), 400
     
     try:
-        data = json.load(file)
+        with open(file_path, 'r') as file:
+            data = json.load(file)
 
         # Apply filtering if filter_json is provided
         filter_key, filter_value = None, None
