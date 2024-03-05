@@ -76,7 +76,8 @@ The microservice returns a JSON list of moves associated with the specified Pok√
 
 ## UML Sequence Diagram
 
-![UML Sequence Diagram for Pokemon Microservice](/web/ uml_sequence_diagram.png)
+![uml_sequence_diagram](https://github.com/flattumc/CS361-Microservice/assets/122336698/7bc1b333-c85c-4213-9f95-d8f045aed5ca)
+
 
 ## License
 This project is licensed under the MIT License - see the LICENSE.md file for details.
