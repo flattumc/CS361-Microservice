@@ -74,5 +74,9 @@ else:
 ## Output
 The microservice returns a JSON list of moves associated with the specified Pokémon name. If the Pokémon name does not exist in the dataset, an error message will be returned.
 
+## UML Sequence Diagram
+
+
+
 ## License
 This project is licensed under the MIT License - see the LICENSE.md file for details.
