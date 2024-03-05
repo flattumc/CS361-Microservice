@@ -19,7 +19,6 @@ To request data from the microservice, you need to send a HTTP GET request to th
 Here is how you can request data for "Bulbasaur":
 
 ```python
-Copy code
 import requests
 ```
 
@@ -36,7 +35,6 @@ The microservice responds with a JSON payload containing a list of moves associa
 For a successful request, you might receive a response like this:
 
 ```json
-Copy code
 [
     "tackle",
     "growl",
@@ -48,7 +46,6 @@ Copy code
 In case of an error (e.g., Pokémon not found), the response might look like:
 
 ```json
-Copy code
 {
     "error": "Pokémon 'Bulbasaur' not found"
 }
@@ -59,7 +56,6 @@ To retrieve data for a specific Pokémon, follow the example provided in the "Re
 Python GET Example:
 
 ```python
-Copy code
 import requests
 
 # Replace with the actual URL of your microservice
