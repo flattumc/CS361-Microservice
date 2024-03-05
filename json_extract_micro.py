@@ -3,48 +3,33 @@ import json
 
 app = Flask(__name__)
 
-def find_in_data(data, key, filter_key=None, filter_value=None):
-    if isinstance(data, dict):
-        if filter_key in data and data.get(filter_key) == filter_value:
-            return data.get(key, None)
-        for k, v in data.items():
-            found = find_in_data(v, key, filter_key, filter_value)
-            if found:
-                return found
-    elif isinstance(data, list):
-        for item in data:
-            found = find_in_data(item, key, filter_key, filter_value)
-            if found:
-                return found
-    return None
+# Assuming your JSON file is named 'pokemon_moves.json' and located in the same directory as this script.
+# Adjust the file path as necessary.
+JSON_FILE_PATH = 'web/pokemon_moves.json'
 
-@app.route('/upload_and_get_data', methods=['POST'])
-def upload_and_get_data():
-    file_path = request.form.get('file_path')
-    output_key = request.form.get('output_key')  # Key to output
-    filter_json = request.form.get('filter_json')  # Optional filter in the format "key:value"
-
-    if not file_path:
-        return jsonify({"error": "No file path provided"}), 400
-    
+def load_pokemon_moves():
     try:
-        with open(file_path, 'r') as file:
-            data = json.load(file)
+        with open(JSON_FILE_PATH, 'r') as file:
+            return json.load(file)
+    except FileNotFoundError:
+        print("JSON file not found.")
+        return {}
+    except json.JSONDecodeError:
+        print("Error decoding JSON.")
+        return {}
 
-        # Apply filtering if filter_json is provided
-        filter_key, filter_value = None, None
-        if filter_json:
-            filter_key, filter_value = filter_json.split(":")
-            filter_key, filter_value = filter_key.strip(), filter_value.strip()
+# Load the JSON data once when the app starts
+pokemon_moves = load_pokemon_moves()
 
-        # Find and return the data for the output_key, applying any filter if specified
-        output_data = find_in_data(data, output_key, filter_key, filter_value)
-        if output_data is not None:
-            return jsonify(output_data)
-        else:
-            return jsonify({"error": f"Data for key '{output_key}' not found or does not match filter criteria"}), 404
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+@app.route('/pokemon/<pokemon_name>', methods=['GET'])
+def get_pokemon_moves(pokemon_name):
+    # Retrieve moves for the given Pokémon name
+    moves = pokemon_moves.get(pokemon_name.lower())
+    
+    if moves is not None:
+        return jsonify([move['name'] for move in moves])
+    else:
+        return jsonify({"error": f"Moves for Pokémon '{pokemon_name}' not found"}), 404
 
 if __name__ == '__main__':
     app.run(debug=True)
